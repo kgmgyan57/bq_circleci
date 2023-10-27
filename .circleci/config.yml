@@ -1,15 +1,16 @@
 version: 2
 jobs:
  check-changes-in-repo:
-     working_directory: ~/repo
-     steps:
+    docker:
+      - image: google/cloud-sdk
+    working_directory: ~/repo
+    steps:
       - checkout
       - run:
          name: List Changed Files
          command: |
           git diff --name-only HEAD^..HEAD > changed_files.txt
           echo "cat changed_files.txt"
-        
 
 
 workflows:
