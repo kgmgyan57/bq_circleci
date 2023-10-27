@@ -10,8 +10,6 @@ jobs:
   build:
     filters:
       branches:
-        ignore:
-          - /.*-pull-request-.*/
     docker:
       - image: google/cloud-sdk
     working_directory: ~/repo
