@@ -9,7 +9,7 @@ jobs:
       - run:
          name: List Changed Files
          command: |
-          git diff --name-only HEAD^..HEAD > changed_files.txt
+          git diff --name-only HEAD^..HEAD | grep -E '.*\.sql' | > changed_files.txt
           echo "`cat changed_files.txt`"
  run-changes-in-repo:
     docker:
@@ -23,7 +23,8 @@ jobs:
           echo $GCLOUD_SERVICE_KEY > key.json
           gcloud auth activate-service-account --key-file=key.json
           gcloud config set project $GCLOUD_PROJECT_ID
-          for file in ("`cat changed_files.txt`");do
+          for file in ("`cat changed_files.txt`"`);do
+           echo "`cat file`"
            bq query --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < $file
           done
 
