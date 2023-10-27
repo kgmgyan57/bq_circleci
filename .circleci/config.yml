@@ -30,11 +30,19 @@ jobs:
             echo "Changed files:"
             echo "$CHANGED_FILES"
       - run:
-          name: List Changed Files2
+          name: Check for changed SQL files
           command: |
             git diff --name-only HEAD@{1} HEAD | grep -E '.*\.sql' | sort > changed_sql_files.txt
-            echo "Changed files:"
-            echo "$(cat changed_sql_files.txt)"
+            NEW_FILES=$(git diff --name-only HEAD@{1} HEAD | grep -E '.*\.sql')
+            echo "$NEW_FILES"
+
+      - run:
+          name: Run changed SQL files on BigQuery
+          command: |
+            for sql_file in $(cat changed_sql_files.txt); do
+              echo "executing sql"
+              bq query --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < $sql_file
+            done
       - run:
           name: Execute DDL in BigQuery
           command: |
