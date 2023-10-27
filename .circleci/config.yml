@@ -1,9 +1,16 @@
 version: 2
 
 on:
-  push:
-    branches:    
-      - main
+  pre-merge: &pre-merge
+  filters:
+    branches:
+      only: /^(pull\/).*$/
+ 
+  merge: &merge
+    filters:
+      branches:
+        only: /^(?!pull\/).*$/
+
 jobs:
   build:
     filters:
