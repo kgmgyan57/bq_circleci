@@ -15,6 +15,7 @@ jobs:
   build:
     filters:
       branches:
+       only: main
     docker:
       - image: google/cloud-sdk
     working_directory: ~/repo
