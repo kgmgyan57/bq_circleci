@@ -11,13 +11,31 @@ jobs:
          command: |
           git diff --name-only HEAD^..HEAD > changed_files.txt
           echo "`cat changed_files.txt`"
-
+ run-changes-in-repo:
+    docker:
+      - image: google/cloud-sdk
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+         name: Run Changed Files
+         command: |
+          echo $GCLOUD_SERVICE_KEY > key.json
+          gcloud auth activate-service-account --key-file=key.json
+          gcloud config set project $GCLOUD_PROJECT_ID
+          for file in ("`cat changed_files.txt`");do
+           bq query --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < $file
+          done
 
 workflows:
   version: 2
   build-deploy:
     jobs:
       - check-changes-in-repo:
+          filters:
+           branches:
+            only: main
+      - run-changes-in-repo:
           filters:
            branches:
             only: main
