@@ -1,50 +1,22 @@
 version: 2
-
-on:
-  pre-merge: &pre-merge
-  filters:
-    branches:
-      only: /^(pull\/).*$/
- 
-  merge: &merge
-    filters:
-      branches:
-        only: /^(?!pull\/).*$/
-
 jobs:
-  build:
-    filters:
-      branches:
-       only: main
-    docker:
-      - image: google/cloud-sdk
-    working_directory: ~/repo
-    steps:
+ check-changes-in-repo:
+     working_directory: ~/repo
+     steps:
       - checkout
       - run:
-          name: Install gcloud CLI
-          command: |
-            echo $GCLOUD_SERVICE_KEY > key.json
-            gcloud auth activate-service-account --key-file=key.json
-            gcloud config set project $GCLOUD_PROJECT_ID
-      - run:
-          name: List Changed Files
-          command: |
-            CHANGED_FILES=$(git diff --name-only HEAD@{1} HEAD)
-            echo "Changed files:"
-            echo "$CHANGED_FILES"
-      - run:
-          name: Execute DDL in BigQuery
-          command: |
-            for FILE in $CHANGED_FILES; do
-              bq query --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < $FILE
-            done
-      - run:
-          name: Run Inside Folder
-          command : |
-            bq query --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < datamesh-ddl/table_1.sql
+         name: List Changed Files
+         command: |
+          git diff --name-only HEAD^..HEAD > changed_files.txt
+          echo "cat changed_files.txt"
+        
+
+
 workflows:
   version: 2
   build-deploy:
     jobs:
-      - build
+      - check-changes-in-repo:
+          filters:
+           branches:
+            only: main
