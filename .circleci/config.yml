@@ -2,8 +2,6 @@ version: 2
 
 on:
   push:
-    paths:
-    - 'datamesh-ddl/**'
     branches:    
       - main
 jobs:
