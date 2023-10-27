@@ -11,6 +11,8 @@ jobs:
          command: |
           git diff --name-only HEAD^..HEAD | grep -E '.*\.sql' | sort > changed_files.txt
           echo "`cat changed_files.txt`"
+          export CHANGED_FILES=`git diff --name-only HEAD^..HEAD | grep -E '.*\.sql'`
+          echo $CHANGED_FILES
  run-changes-in-repo:
     docker:
       - image: google/cloud-sdk
