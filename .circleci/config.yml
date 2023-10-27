@@ -31,7 +31,10 @@ jobs:
             for FILE in $CHANGED_FILES; do
               bq query --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < $FILE
             done
-
+      - run:
+          name: Run Inside Folder
+          command : |
+            bq query --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < datamesh-ddl/table1.sql
 workflows:
   version: 2
   build-deploy:
