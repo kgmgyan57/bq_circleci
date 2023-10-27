@@ -1,0 +1,43 @@
+version: 2
+
+on:
+  push:
+    paths:
+    - 'datamesh-ddl/**'
+    branches:    
+      - main
+jobs:
+  build:
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - checkout
+      - run:
+          name: Install gcloud CLI
+          command: |
+            echo $GCLOUD_SERVICE_KEY > key.json
+            gcloud auth activate-service-account --key-file=key.json
+            gcloud config set project $GCLOUD_PROJECT_ID
+      - run:
+          name: List Changed Files
+          command: |
+            CHANGED_FILES=$(git diff --name-only $CIRCLE_BRANCH $REFERENCE_BRANCH)
+            echo "Changed files:"
+            echo "$CHANGED_FILES"
+      - run:
+          name: List Changed Files
+          command: |
+            CHANGED_FILES=$(git diff --name-only $CIRCLE_BRANCH $REFERENCE_BRANCH)
+            echo "Changed files:"
+            echo "$CHANGED_FILES"
+      - run:
+          name: Execute DDL in BigQuery
+          command: |
+            for FILE in $CHANGED_FILES; do
+              bq query --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < $FILE
+            done
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
