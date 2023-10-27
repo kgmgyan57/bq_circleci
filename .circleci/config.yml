@@ -10,7 +10,7 @@ jobs:
          name: List Changed Files
          command: |
           git diff --name-only HEAD^..HEAD > changed_files.txt
-          echo "cat changed_files.txt"
+          echo "`cat changed_files.txt`"
 
 
 workflows:
