@@ -34,7 +34,7 @@ jobs:
           command: |
             git diff --name-only HEAD@{1} HEAD | grep -E '.*\.sql' | sort > changed_sql_files.txt
             echo "Changed files:"
-            echo "$(`cat changed_sql_files.txt`)"
+            echo "$(cat changed_sql_files.txt)"
       - run:
           name: Execute DDL in BigQuery
           command: |
