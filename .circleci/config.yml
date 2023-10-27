@@ -10,6 +10,7 @@ jobs:
   build:
     docker:
       - image: google/cloud-sdk
+    working_directory: ~/repo
     steps:
       - checkout
       - run:
@@ -20,21 +21,18 @@ jobs:
             gcloud config set project $GCLOUD_PROJECT_ID
       - run:
           name: List Changed Files
-          working_directory: datamesh-ddl
           command: |
             CHANGED_FILES=$(git diff --name-only $CIRCLE_BRANCH $REFERENCE_BRANCH)
             echo "Changed files:"
             echo "$CHANGED_FILES"
       - run:
           name: List Changed Files2
-          working_directory: datamesh-ddl
           command: |
             CHANGED_FILES=$(git diff --no-index --name-only --diff-filter=d $CIRCLE_BRANCH $REFERENCE_BRANCH)
             echo "Changed files:"
             echo "$CHANGED_FILES"
       - run:
           name: Execute DDL in BigQuery
-          working_directory: datamesh-ddl
           command: |
             for FILE in $CHANGED_FILES; do
               bq query --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < $FILE
