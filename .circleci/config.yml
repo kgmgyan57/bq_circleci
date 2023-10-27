@@ -8,6 +8,10 @@ on:
       - main
 jobs:
   build:
+    filters:
+      branches:
+        ignore:
+          - /.*-pull-request-.*/
     docker:
       - image: google/cloud-sdk
     working_directory: ~/repo
@@ -19,6 +23,12 @@ jobs:
             echo $GCLOUD_SERVICE_KEY > key.json
             gcloud auth activate-service-account --key-file=key.json
             gcloud config set project $GCLOUD_PROJECT_ID
+      - run:
+          name: List All Files
+          command: |
+            ALL_FILES = $(git ls-tree --full-tree --name-only $REFERENCE_BRANCH)
+            echo "All files:"
+            echo "$ALL_FILES"
       - run:
           name: List Changed Files
           command: |
