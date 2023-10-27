@@ -28,7 +28,7 @@ jobs:
       - run:
           name: List Changed Files2
           command: |
-            CHANGED_FILES=$(git diff --no-index --name-only --diff-filter=d $CIRCLE_BRANCH $REFERENCE_BRANCH)
+            CHANGED_FILES=$(git diff --name-only --diff-filter=d $CIRCLE_BRANCH $REFERENCE_BRANCH datamesh-ddl/)
             echo "Changed files:"
             echo "$CHANGED_FILES"
       - run:
