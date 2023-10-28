@@ -7,3 +7,6 @@ CREATE TABLE IF NOT EXISTS zalora-dwh.staging.mgktable2
     column_5 numeric,
     column_6 string
 );
+
+
+ALTER TABLE zalora-dwh.staging.mgktable2 ALTER COLUMN column_5 SET DATA TYPE int64;
