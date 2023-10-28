@@ -39,7 +39,7 @@ jobs:
          name: Run Changed Files
          command: |
           for file in $CHANGED_FILES;do
-           echo "`cat file`"
+           echo "`cat $file`"
            bq query --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < \$file
           done
 
