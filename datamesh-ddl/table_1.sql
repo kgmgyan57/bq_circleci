@@ -1,4 +1,4 @@
-create table if not exists zalora-dwh.staging.mgktable1
+CREATE TABLE IF NOT EXISTS zalora-dwh.staging.mgktable1
 (
     column_1 int64,
     column_2 string,
@@ -7,3 +7,5 @@ create table if not exists zalora-dwh.staging.mgktable1
     column_5 int64,
     column_6 string
 );
+
+ALTER TABLE zalora-dwh.staging.mgktable1 ADD COLUMN column_7 int64;
