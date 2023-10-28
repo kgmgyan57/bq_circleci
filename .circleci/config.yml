@@ -13,7 +13,10 @@ jobs:
           echo "`cat changed_files.txt`"
           export CHANGED_FILES=`git diff --name-only HEAD^..HEAD | grep -E '.*\.sql'`
           echo $CHANGED_FILES
- 
+          for file in $CHANGED_FILES;do
+           echo "`cat file`"
+           bq query --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < \$file
+          done
  set-bigquery-connection:
     docker:
       - image: google/cloud-sdk
@@ -44,11 +47,13 @@ workflows:
   version: 2
   build-deploy:
     jobs:
-      - check-changes-in-repo:
+      - set-bigquery-connection:
           filters:
            branches:
             only: main
-      - set-bigquery-connection:
+      - check-changes-in-repo:
+          requires:
+            - set-bigquery-connection
           filters:
            branches:
             only: main
