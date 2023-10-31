@@ -20,7 +20,7 @@ jobs:
           echo $CHANGED_FILES
           for file in $CHANGED_FILES;do
            echo "Dry running the sql $file"
-           git diff HEAD^..HEAD $file >> tempfile
+           export tempfile = `git diff HEAD^..HEAD $file`
            echo "`cat $tempfile`"
            bq query --dry_run --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < $tempfile
            if [ $? -ne 0 ]; then
@@ -49,7 +49,7 @@ jobs:
 
           for file in $CHANGED_FILES;do
            echo "Executing sql $file"
-           git diff HEAD^..HEAD $file >> tempfile
+           export tempfile = `git diff HEAD^..HEAD $file`
            echo "`cat $tempfile`"
            bq query --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < $tempfile
           done
