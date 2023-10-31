@@ -16,3 +16,5 @@ ALTER TABLE zalora-dwh.staging.mgktable1 ADD COLUMN IF NOT EXISTS  column_8 int6
 ALTER TABLE zalora-dwh.staging.mgktable1 ADD COLUMN IF NOT EXISTS  column_9 int64;
 
 ALTER TABLE zalora-dwh.staging.mgktable1 ADD COLUMN IF NOT EXISTS  column_10 string;
+
+DROP TABLE IF EXISTS zalora-dwh.staging.mgktable1;
