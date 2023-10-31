@@ -20,8 +20,9 @@ jobs:
           echo $CHANGED_FILES
           for file in $CHANGED_FILES;do
            echo "Dry running the sql $file"
-           echo "`cat $file`"
-           bq query --dry_run --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < $file
+           git diff HEAD^..HEAD $file >> $tempfile
+           echo "`cat $tempfile`"
+           bq query --dry_run --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < $tempfile
            if [ $? -ne 0 ]; then
             echo "SQL syntax error in file $file"
             exit 1
@@ -48,8 +49,9 @@ jobs:
 
           for file in $CHANGED_FILES;do
            echo "Executing sql $file"
-           echo "`cat $file`"
-           bq query --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < $file
+           git diff HEAD^..HEAD $file >> $tempfile
+           echo "`cat $tempfile`"
+           bq query --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < $tempfile
           done
 
 workflows:
