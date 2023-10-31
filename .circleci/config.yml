@@ -19,7 +19,7 @@ jobs:
           export CHANGED_FILES=`git diff --name-only HEAD^..HEAD | grep -E '.*\.sql'`
           echo $CHANGED_FILES
           git diff --name-only HEAD^..HEAD | grep -E '.*\.sql' | while read file; do
-           if grep -i '^\s*DROP\s+(TABLE|VIEW|DATABASE|SCHEMA|PROCEDURE|FUNCTION)\s+' "$file"; then
+           if grep -E '^\s*DROP\s+(TABLE|VIEW|DATABASE|SCHEMA|PROCEDURE|FUNCTION)\s+' "$file"; then
             echo "Drop statement found in file $file"
             exit 1
            fi
