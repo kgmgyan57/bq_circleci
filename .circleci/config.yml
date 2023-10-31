@@ -50,7 +50,7 @@ jobs:
           for file in $CHANGED_FILES;do
            echo "Executing sql $file"
            export tempfile = `git diff HEAD^..HEAD $file`
-           echo "`cat $tempfile`"
+           echo "Executing line `cat $tempfile`"
            bq query --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < $tempfile
           done
 
