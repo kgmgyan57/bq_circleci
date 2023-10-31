@@ -7,3 +7,5 @@ CREATE TABLE IF NOT EXISTS zalora-dwh.staging.cci_table2
     column_5 int64,
     column_6 string
 );
+
+ALTER TABLE zalora-dwh.staging.cci_table2 ADD COLUMN IF NOT EXISTS column_7 string;
