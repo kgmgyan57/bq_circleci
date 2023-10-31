@@ -8,4 +8,4 @@ CREATE TABLE IF NOT EXISTS zalora-dwh.staging.cci_table3
     column_6 string
 );
 
-DROP TABLE zalora-dwh.staging.cci_table3;
+--DROP TABLE zalora-dwh.staging.cci_table3;
