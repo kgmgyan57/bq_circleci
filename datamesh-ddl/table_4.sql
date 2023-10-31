@@ -9,3 +9,5 @@ CREATE TABLE IF NOT EXISTS zalora-dwh.staging.mgktable4
 );
 
 ALTER TABLE zalora-dwh.staging.mgktable4 ADD COLUMN column_7 string;
+
+ALTER TABLE zalora-dwh.staging.mgktable4 ADD COLUMN column_8 string;
