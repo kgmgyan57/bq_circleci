@@ -7,32 +7,26 @@ jobs:
     steps:
       - checkout
       - run:
-         name: List Changed Files
+         name: Connect to BigQuery
          command: |
           echo $GCLOUD_SERVICE_KEY > key.json
           gcloud auth activate-service-account --key-file=key.json
           gcloud config set project $GCLOUD_PROJECT_ID
-          
-          git diff --name-only HEAD^..HEAD | grep -E '.*\.sql' | sort > changed_files.txt
-          echo "`cat changed_files.txt`"
-          echo "this sql will be executed now"
+
+      - run:
+         name: Dry Run Changed Files
+         command: |
           export CHANGED_FILES=`git diff --name-only HEAD^..HEAD | grep -E '.*\.sql'`
           echo $CHANGED_FILES
           for file in $CHANGED_FILES;do
+           echo "Dry running the sql $file"
            echo "`cat $file`"
-           bq query --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < $file
+           bq query --dry_run --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < $file
+           if [ $? -ne 0 ]; then
+            echo "SQL syntax error in file $file"
+            exit 1
+           fi
           done
- set-bigquery-connection:
-    docker:
-      - image: google/cloud-sdk
-    steps:
-     - checkout
-     - run:
-          name: Install gcloud CLI
-          command: |
-            echo $GCLOUD_SERVICE_KEY > key.json
-            gcloud auth activate-service-account --key-file=key.json
-            gcloud config set project $GCLOUD_PROJECT_ID
          
  run-changes-in-repo:
     docker:
@@ -41,30 +35,32 @@ jobs:
     steps:
       - checkout
       - run:
+         name: Connect to BigQuery
+         command: |
+          echo $GCLOUD_SERVICE_KEY > key.json
+          gcloud auth activate-service-account --key-file=key.json
+          gcloud config set project $GCLOUD_PROJECT_ID
+      
+      - run:
          name: Run Changed Files
          command: |
+          export CHANGED_FILES=`git diff --name-only HEAD^..HEAD | grep -E '.*\.sql'`
+
           for file in $CHANGED_FILES;do
+           echo "Executing sql $file"
            echo "`cat $file`"
-           bq query --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < \$file
+           bq query --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < $file
           done
 
 workflows:
   version: 2
   build-deploy:
     jobs:
-      - set-bigquery-connection:
-          filters:
-           branches:
-            only: main
       - check-changes-in-repo:
-          requires:
-            - set-bigquery-connection
           filters:
            branches:
-            only: main
+            ignore: main
       - run-changes-in-repo:
-          requires:
-            - set-bigquery-connection
           filters:
            branches:
             only: main
