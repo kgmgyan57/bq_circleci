@@ -7,6 +7,3 @@ CREATE TABLE IF NOT EXISTS zalora-dwh.staging.mgktable3
     column_5 numeric,
     column_6 string
 );
-
-
-ALTER TABLE zalora-dwh.staging.mgktable3 ADD COLUMN column_7 int64;
