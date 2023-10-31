@@ -9,8 +9,10 @@ CREATE TABLE IF NOT EXISTS zalora-dwh.staging.mgktable1
 );
 
 
---ALTER TABLE zalora-dwh.staging.mgktable1 ADD COLUMN column_7 int64;
+ALTER TABLE zalora-dwh.staging.mgktable1 ADD COLUMN IF NOT EXISTS  column_7 int64;
 
---ALTER TABLE zalora-dwh.staging.mgktable1 ADD COLUMN column_8 int64;
+ALTER TABLE zalora-dwh.staging.mgktable1 ADD COLUMN IF NOT EXISTS  column_8 int64;
 
-ALTER TABLE zalora-dwh.staging.mgktable1 DROP COLUMN column_9;
+ALTER TABLE zalora-dwh.staging.mgktable1 ADD COLUMN IF NOT EXISTS  column_9 int64;
+
+ALTER TABLE zalora-dwh.staging.mgktable1 ADD COLUMN IF NOT EXISTS  column_10 string;
