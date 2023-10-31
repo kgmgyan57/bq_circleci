@@ -11,4 +11,4 @@ CREATE TABLE IF NOT EXISTS zalora-dwh.staging.mgktable3
 
 ALTER TABLE zalora-dwh.staging.mgktable3 ADD COLUMN column_7 int64;
 
-ALTER TABLE zalora-dwh.staging.mgktable3 ADD COLUMN column_8 varchar;
+ALTER TABLE zalora-dwh.staging.mgktable3 ADD COLUMN column_8 string;
