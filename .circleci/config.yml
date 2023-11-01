@@ -36,7 +36,7 @@ jobs:
            echo "Dry running the sql $file"
            bq query --dry_run --use_legacy_sql=false --nouse_legacy_sql --project_id=$GCLOUD_PROJECT_ID < $file
            if [ $? -ne 0 ]; then
-            echo "SQL syntax error in file $file"
+            echo "SQL syntax error in the file $file"
             exit 1
            fi
           done
