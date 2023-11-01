@@ -7,5 +7,3 @@ CREATE TABLE IF NOT EXISTS zalora-dwh.staging.cci_table3
     column_5 int64,
     column_6 string
 );
-
---DROP TABLE zalora-dwh.staging.cci_table3;
